@@ -1,9 +1,15 @@
-import express from 'express';
 
- const app = express();
- import cors from 'cors';
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import authRoutes from "./Routes/UserRoutes.js";
 
- app.use(express.json());
- app.use(cors())
+dotenv.config();
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use("/uploads", express.static("uploads")); // serve uploaded files
 
- export default app;
+app.use("/api/auth", authRoutes);
+
+export default app;

@@ -1,0 +1,64 @@
+import User from "../Models/User.js";
+import jwt from "jsonwebtoken";
+import bcrypt from 'bcrypt'
+
+// Signup
+export const signup = async (req, res) => {
+  try {
+   const { name, email, password, panNumber } = req.body || {};
+// if (!name || !email || !password || !panNumber) {
+//   return res.status(400).json({ error: "All fields are required." });
+// }
+
+
+console.log("REQ.BODY:", req.body);
+console.log("REQ.FILE:", req.file);
+console.log("Password received:", req.body?.password);
+
+    // console.log("BODY:", req.body);     // should contain name, email, password, panNumber
+//   console.log("FILE:", req.file);
+    const kycDocument = req.file ? req.file.path : null;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ msg: "User exists" });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      panNumber,
+      kycDocument,
+    });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.status(201).json({ token, user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Login
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ msg: "User not found" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.json({ token, user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
