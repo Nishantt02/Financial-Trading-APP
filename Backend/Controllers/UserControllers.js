@@ -6,17 +6,8 @@ import bcrypt from 'bcrypt'
 export const signup = async (req, res) => {
   try {
    const { name, email, password, panNumber } = req.body || {};
-// if (!name || !email || !password || !panNumber) {
-//   return res.status(400).json({ error: "All fields are required." });
-// }
 
 
-console.log("REQ.BODY:", req.body);
-console.log("REQ.FILE:", req.file);
-console.log("Password received:", req.body?.password);
-
-    // console.log("BODY:", req.body);     // should contain name, email, password, panNumber
-//   console.log("FILE:", req.file);
     const kycDocument = req.file ? req.file.path : null;
 
     const existingUser = await User.findOne({ email });
