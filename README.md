@@ -248,3 +248,38 @@ Response:
   "details": "Dummy detailed description",
   "chartData": [dummy chart data ]
 }
+
+
+Backend (fintrade-backend)
+
+Express – Web framework for Node.js
+
+Mongoose – MongoDB object modeling
+
+dotenv – Environment variable management
+
+bcrypt – Password hashing
+
+jsonwebtoken (JWT) – Authentication tokens
+
+multer – File upload handling (for KYC documents)
+
+cors – Cross-origin requests
+
+nodemon (dev dependency) – Auto-restart server during development
+
+Frontend (fintrade-frontend)
+
+React – Frontend library
+
+React Router DOM – Routing/navigation
+
+Axios – HTTP client for API requests
+
+Recharts – Charts for product price history
+
+Tailwind CSS – Styling
+
+React Icons – Optional icons
+
+react-hook-form – Optional, for forms (signup/KYC)
