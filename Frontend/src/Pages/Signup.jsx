@@ -1,42 +1,52 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
+import { UserContext } from "../Usercontext";
 export default function Signup() {
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     panNumber: "",
-    kycDocument:""
   });
   const [kycDocument, setKycDocument] = useState(null);
 
   const navigate = useNavigate();
+  const { setUser, fetchUser } = useContext(UserContext); // Context for Navbar updates
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleFileChange = (e) => {
-    setKycDocument(e.target.files[0]);
-  };
+  const handleFileChange = (e) => setKycDocument(e.target.files[0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // prepare form data
+      // Prepare form data
       const formData = new FormData();
-      Object.keys(form).forEach((key) => {
-        formData.append(key, form[key]);
-      });
+      Object.keys(form).forEach((key) => formData.append(key, form[key]));
       if (kycDocument) formData.append("kycDocument", kycDocument);
 
+      // Signup request
       await API.post("/auth/signup", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      alert("Signup successful, please login!");
-      navigate("/login");
+      alert("Signup successful!");
+
+      // Auto-login after signup
+      const loginRes = await API.post("/auth/login", {
+        email: form.email,
+        password: form.password,
+      });
+
+      localStorage.setItem("token", loginRes.data.token);
+      setUser({ token: loginRes.data.token });
+      fetchUser(); // fetch wallet & user info immediately
+
+      navigate("/products"); // redirect to products
     } catch (err) {
+      console.error(err);
       alert(err.response?.data?.error || "Signup failed");
     }
   };
@@ -90,7 +100,6 @@ export default function Signup() {
           required
         />
 
-       
         <input
           type="file"
           name="kycDocument"
