@@ -2,75 +2,36 @@ import User from "../Models/User.js";
 import Product from "../Models/Product.js";
 import Transaction from "../Models/Transaction.js";
 
-// export const buyProduct = async (req, res) => {
-//   const { productId } = req.params;
-//   const { units } = req.body;
-//   const userId = req.user._id;
-
-//   try {
-
-// const product = await Product.findById(productId.trim());
-
-//     const user = await User.findById(userId);
-
-//     const totalCost = product.price * units;
-
-//     if (user.wallet < totalCost) return res.status(400).json({ message: "Insufficient balance" });
-
-//     user.wallet -= totalCost;
-
-//     const existing = user.portfolio.find(p => p.product.toString() === productId);
-//     if (existing) {
-//       existing.units += units;
-//       existing.investedAmount += totalCost;
-//     } else {
-//       user.portfolio.push({ product: productId, units, investedAmount: totalCost });
-//     }
-
-//     await user.save();
-//     await Transaction.create({ user: userId, product: productId, units, totalAmount: totalCost });
-
-//     res.json({ message: "Purchase successful" });
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
 
 export const buyProduct = async (req, res) => {
   try {
-    const { userId, units } = req.body;
+    const { units } = req.body;
     const { productId } = req.params;
 
-    if (!userId) return res.status(400).json({ message: "userId is required" });
-    if (!units || isNaN(units)) return res.status(400).json({ message: "Valid units required" });
-
-    const user = await User.findById(userId.trim());
+    const user = await User.findById(req.user._id); // get user from JWT
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const product = await Product.findById(productId.trim());
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // Ensure numbers
-    const numUnits = Number(units);
-    const pricePerUnit = Number(product.pricePerUnit);
-    if (isNaN(pricePerUnit)) return res.status(400).json({ message: "Invalid product price" });
+    if (!units || isNaN(units)) return res.status(400).json({ message: "Valid units required" });
 
-    const totalCost = numUnits * pricePerUnit;
+    const totalCost = units * product.pricePerUnit;
 
-    if (isNaN(user.wallet)) user.wallet = 100000; // default wallet if NaN
+    if (isNaN(user.wallet)) user.wallet = 100000; // default wallet
     if (user.wallet < totalCost) return res.status(400).json({ message: "Insufficient balance" });
 
     user.wallet -= totalCost;
 
-    // Update portfolio safely
+    // Update portfolio
     const existing = user.portfolio.find(p => p.product.toString() === product._id.toString());
     if (existing) {
-      existing.units += numUnits;
+      existing.units += units;
       existing.investedAmount += totalCost;
     } else {
       user.portfolio.push({
         product: product._id,
-        units: numUnits,
+        units,
         investedAmount: totalCost
       });
     }
@@ -80,7 +41,7 @@ export const buyProduct = async (req, res) => {
     await Transaction.create({
       user: user._id,
       product: product._id,
-      units: numUnits,
+      units,
       totalAmount: totalCost
     });
 
@@ -90,8 +51,6 @@ export const buyProduct = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
-
 
 
 

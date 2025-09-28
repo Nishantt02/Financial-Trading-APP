@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../Api";
-
+import API from "../api";
 export default function Signup() {
   const [form, setForm] = useState({
     name: "",
