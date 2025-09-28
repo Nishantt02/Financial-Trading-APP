@@ -54,18 +54,22 @@ export const buyProduct = async (req, res) => {
 
 
 
+
+
 export const getPortfolio = async (req, res) => {
   try {
-    const userId = req.query.userId; // get from query
-    if (!userId) return res.status(400).json({ message: "userId is required" });
+    const user = await User.findById(req.user._id)
+      .populate("portfolio.product") // portfolio product details
+      .populate("watchlist");        // populate watchlist product details
 
-    const user = await User.findById(userId.trim()).populate("portfolio.product");
     if (!user) return res.status(404).json({ message: "User not found" });
 
+    // Map portfolio
     const portfolio = user.portfolio.map(item => {
-      const price = item.product.pricePerUnit || 0; // ensure number
+      const price = item.product.pricePerUnit || 0;
       const currentValue = item.units * price;
       return {
+        productId: item.product._id,
         productName: item.product.name,
         units: item.units,
         investedAmount: item.investedAmount,
@@ -74,12 +78,23 @@ export const getPortfolio = async (req, res) => {
       };
     });
 
-    res.json({ wallet: user.wallet || 100000, portfolio });
+    // Map watchlist
+    const watchlist = user.watchlist.map(p => ({
+      _id: p._id,
+      name: p.name,
+    }));
+
+    res.json({
+      wallet: user.wallet || 100000,
+      portfolio,
+      watchlist,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const addToWatchlist = async (req, res) => {
   const user = await User.findById(req.user._id);
