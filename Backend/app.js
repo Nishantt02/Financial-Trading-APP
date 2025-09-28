@@ -5,7 +5,7 @@ import cors from "cors";
 import morgan from 'morgan';
 import authRoutes from "./Routes/UserRoutes.js";
 import productsRouter from './Routes/ProductRoutes.js'
-
+import Transactionroute from './Routes/TransactionRoute.js'
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -15,5 +15,6 @@ app.use("/uploads", express.static("uploads")); // serve uploaded files
 
 app.use("/api/auth", authRoutes);
 app.use('/api/products', productsRouter);
+app.use('/api/transaction',Transactionroute)
 
 export default app;

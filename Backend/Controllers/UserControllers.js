@@ -5,10 +5,12 @@ import bcrypt from 'bcrypt'
 // Signup
 export const signup = async (req, res) => {
   try {
-   const { name, email, password, panNumber } = req.body || {};
-
-
+    const { name, email, password, panNumber } = req.body || {};
     const kycDocument = req.file ? req.file.path : null;
+
+    if (!name || !email || !password || !panNumber) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ msg: "User exists" });
@@ -29,6 +31,7 @@ export const signup = async (req, res) => {
 
     res.status(201).json({ token, user });
   } catch (err) {
+    console.error("Signup error:", err);
     res.status(500).json({ error: err.message });
   }
 };
