@@ -26,7 +26,10 @@ const products = [
 
 async function seed() {
   try {
-    await mongoose.connect('mongodb+srv://nishantchauhannn_db_user:gxf6j3ckwZvPgMc8@cluster0.pef8tn7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+    await mongoose.connect(
+  'mongodb+srv://nishantchauhannn_db_user:gxf6j3ckwZvPgMc8@cluster0.pef8tn7.mongodb.net/investmentDB?retryWrites=true&w=majority&appName=Cluster0'
+   );
+
 
     for (const product of products) {
       const exists = await Product.findOne({ name: product.name });
