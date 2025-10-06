@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Production URL via environment variable, fallback to localhost for local dev
 const API = axios.create({
-  baseURL: 'https://financial-trading-app-76.onrender.com/api',
+  baseURL: 'https://localhost:5000/api',
   withCredentials: true // if using cookies/auth
 });
 

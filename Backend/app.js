@@ -17,7 +17,6 @@ const __dirname = path.resolve();
 // CORS config
 // ------------------------
 const allowedOrigins = [
-  "https://financial-trading-app-76.onrender.com",
   "http://localhost:5173"
 ];
 
