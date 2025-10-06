@@ -12,7 +12,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post("/signup", upload.single("kycDocument"), signup);
-// router.post("/signup",signup)
 router.post("/login", login);
 
 export default router;
