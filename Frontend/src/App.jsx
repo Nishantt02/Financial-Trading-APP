@@ -1,3 +1,4 @@
+// frontend/src/App.jsx
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Login from "./Pages/Login";
@@ -6,6 +7,7 @@ import ProtectedRoute from "./ProtectRoute";
 import Products from "./Pages/Product";
 import ProductDetail from "./Pages/Productdetails";
 import Portfolio from "./Pages/Portfolio";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -32,7 +34,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/portfolio"
           element={

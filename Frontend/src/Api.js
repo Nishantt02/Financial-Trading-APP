@@ -1,14 +1,10 @@
+// frontend/src/Api.js
 import axios from "axios";
 
+// Production URL via environment variable, fallback to localhost for local dev
 const API = axios.create({
-  baseURL: "https://financial-trading-app-10.onrender.com", // backend url
-
-});
-
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
-  if (token) req.headers.Authorization = `Bearer ${token}`;
-  return req;
+  baseURL:  'https://financial-trading-app-10.onrender.com/api',
+  withCredentials: true // if using cookies/auth
 });
 
 export default API;

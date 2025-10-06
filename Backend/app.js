@@ -33,6 +33,8 @@ import cors from "cors";
 import morgan from 'morgan';
 import authRoutes from "./Routes/UserRoutes.js";
 import productsRouter from './Routes/ProductRoutes.js';
+import seed from '../Backend/seed/seedProduct.js'
+
 import Transactionroute from './Routes/TransactionRoute.js';
 import path from "path";
 
@@ -50,6 +52,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", authRoutes);
 app.use('/api/products', productsRouter);
 app.use('/api/transaction', Transactionroute);
+app.use("/api/seed", seed);
 
 // Serve frontend
 app.use(express.static(path.join(__dirname, "Frontend/dist")));
