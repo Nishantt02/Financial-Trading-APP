@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // backend url
+  baseURL: "https://financial-trading-app-5.onrender.com/", // backend url
 });
 
 API.interceptors.request.use((req) => {
