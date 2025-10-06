@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import API from "../api";
-
+import API from "../Api.js";
 export default function Portfolio() {
   const [wallet, setWallet] = useState(100000);
   const [portfolio, setPortfolio] = useState([]);

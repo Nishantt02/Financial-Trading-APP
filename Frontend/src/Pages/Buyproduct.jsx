@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import API from "../api"; // axios instance
-
+import API from "../Api.js";
 export default function ProductDetail() {
 const { id } = useParams(); // productId from URL
 const [product, setProduct] = useState(null);

@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../api";
 import { UserContext } from "../Usercontext";
+import API from "../Api.js";
 export default function Signup() {
   const [form, setForm] = useState({
     name: "",

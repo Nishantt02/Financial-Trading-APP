@@ -94,8 +94,7 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import API from "../api";
-
+import API from "../Api.js";
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
