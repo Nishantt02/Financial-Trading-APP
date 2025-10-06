@@ -6,8 +6,7 @@
   "scripts": {
      "dev": "nodemon Backend/index.js",
     "build": "npm install && npm install --prefix Frontend && npm run build --prefix Frontend",
-    "start": "nodemon Backend/index.js",
-    "seed": "node Backend/seed/seedProduct.js"
+    "start": "node Backend/index.js"
   },
   "repository": {
     "type": "git",
