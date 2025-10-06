@@ -11,26 +11,24 @@ dotenv.config();
 const app = express();
 const __dirname = path.resolve();
 
-// Allowed origins
+// Allowed origins for CORS
 const allowedOrigins = [
-  "https://financial-trading-app-54.onrender.com", // frontend production
-  "http://localhost:5173"                          // local dev
+  "https://financial-trading-app-54.onrender.com",
+  "http://localhost:5173"
 ];
 
 // CORS middleware
 app.use(cors({
   origin: function (origin, callback) {
-    console.log("Request origin:", origin); // useful for debugging
-    // allow non-browser requests like Postman
+    console.log("Request origin:", origin);
     if (!origin) return callback(null, true);
-
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error(`Not allowed by CORS: ${origin}`));
     }
   },
-  credentials: true, // only needed if using cookies
+  credentials: true
 }));
 
 // Logging & JSON parsing
@@ -46,8 +44,8 @@ app.use("/api/transaction", Transactionroute);
 // Serve React frontend (production)
 app.use(express.static(path.join(__dirname, "Frontend/dist")));
 
-// SPA catch-all for client-side routing
-app.get("*", (req, res) => {
+// SPA catch-all using regex (works in all environments)
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "Frontend/dist/index.html"));
 });
 
