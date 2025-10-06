@@ -1,6 +1,6 @@
 // src/context/UserContext.jsx
 import { createContext, useState, useEffect } from "react";
-import API from "./api";
+import API from "./Api.js";
 
 export const UserContext = createContext();
 
