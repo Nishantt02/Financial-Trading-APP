@@ -12,7 +12,12 @@ const app = express();
 const __dirname = path.resolve();
 
 // Middleware
-app.use(cors());
+app.use(cors(
+  {
+    origin: "https://financial-trading55.onrender.com",
+    credentials: true,
+  }
+));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
